@@ -94,7 +94,7 @@ export const getMovieReviews = ({ queryKey }) => {
 
 export const getUpcomingMovies = () => {
     return fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=1`
+        `https://api.themoviedb.org/3/movie/upcoming?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=1&region=${import.meta.env.VITE_TMDB_REGION || 'IE'}`
     ).then((response) => {
         if (!response.ok) {
             return response.json().then((error) => {
