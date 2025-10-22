@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from 'react-router';
 import MovieDetails from "../components/movieDetails/";
 import PageTemplate from "../components/templateMoviePage";
+import MovieCredits from "../components/movieCredits/";
 import MovieRecommendations from "../components/movieRecommendations/";
 //import useMovie from "../hooks/useMovie";
 import { getMovie } from '../api/tmdb-api'
@@ -30,6 +31,7 @@ const MoviePage = (props) => {
                 <>
                     <PageTemplate movie={movie}>
                         <MovieDetails movie={movie} />
+                        <MovieCredits movieId={movie.id} />
                         <MovieRecommendations movieId={movie.id} />
                     </PageTemplate>
                 </>
