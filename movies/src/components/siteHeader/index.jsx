@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { MoviesContext } from '../../contexts/moviesContextValue';
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -22,9 +23,8 @@ const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [language, setLanguage] = useState('en-US');
-    const [regionSelect, setRegionSelect] = useState('IE');
-    const open = Boolean(anchorEl);
+    const { region, setRegion, language, setLanguage } = useContext(MoviesContext);
+    // Removed unused variable 'open'
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -34,10 +34,10 @@ const SiteHeader = () => {
     const menuOptions = [
         { label: "Home", path: "/" },
         { label: "Favorites", path: "/movies/favorites" },
+        { label: "Popular", path: "/movies/popular" },
+        { label: "Now Playing", path: "/movies/now-playing" },
         { label: "Upcoming", path: "/movies/upcoming" },
         { label: "Top Rated", path: "/movies/top-rated" },
-        { label: "Now Playing", path: "/movies/now-playing" },
-        { label: "Popular", path: "/movies/popular" },
     ];
 
     const handleMenuSelect = (pageURL) => {
@@ -107,9 +107,9 @@ const SiteHeader = () => {
                                     <Select
                                         labelId="region-select-label"
                                         id="region-select"
-                                        value={regionSelect}
+                                        value={region}
                                         label="Region"
-                                        onChange={(e) => setRegionSelect(e.target.value)}
+                                        onChange={(e) => setRegion(e.target.value)}
                                         sx={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
                                     >
                                         <MenuItem value={'IE'}>Ireland (IE)</MenuItem>
@@ -131,6 +131,21 @@ const SiteHeader = () => {
                                 <MenuIcon />
                             </IconButton>
                         ) : null}
+                        {/* Mobile menu popup - uses anchorEl so ESLint knows it's used */}
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={() => setAnchorEl(null)}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        >
+                            {menuOptions.map((opt) => (
+                                <MenuItem key={opt.label} onClick={() => handleMenuSelect(opt.path)}>
+                                    {opt.label}
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     </Box>
                 </Toolbar>
             </AppBar>

@@ -1,15 +1,32 @@
 import React, { useState, useEffect } from "react";
-
-export const MoviesContext = React.createContext(null);
+import { MoviesContext } from './moviesContextValue';
 
 const MoviesContextProvider = (props) => {
     const [favorites, setFavorites] = useState([])
     const [myReviews, setMyReviews] = useState({})
     const [mustWatch, setMustWatch] = useState([])
 
+    // region: ISO 3166-1 alpha-2 code, persisted in localStorage
+    const [region, setRegion] = useState(() => {
+        try {
+            return localStorage.getItem('tmdb_region') || import.meta.env.VITE_TMDB_REGION || 'IE'
+        } catch {
+            return import.meta.env.VITE_TMDB_REGION || 'IE'
+        }
+    })
+
+    // language: e.g. en-US, es-ES, persisted in localStorage
+    const [language, setLanguage] = useState(() => {
+        try {
+            return localStorage.getItem('tmdb_language') || import.meta.env.VITE_TMDB_LANGUAGE || 'en-US'
+        } catch {
+            return import.meta.env.VITE_TMDB_LANGUAGE || 'en-US'
+        }
+    })
+
     useEffect(() => {
-        console.log(mustWatch); 
-    }, []);
+        console.log(mustWatch);
+    }, [mustWatch]);
     
 
     const addToFavorites = (movie) => {
@@ -42,6 +59,23 @@ const MoviesContextProvider = (props) => {
         }
     };
 
+    // persist region and language selection
+    useEffect(() => {
+        try {
+            localStorage.setItem('tmdb_region', region);
+        } catch {
+            // ignore
+        }
+    }, [region]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem('tmdb_language', language);
+        } catch {
+            // ignore
+        }
+    }, [language]);
+
     return (
         <MoviesContext.Provider
             value={{
@@ -50,6 +84,10 @@ const MoviesContextProvider = (props) => {
                 removeFromFavorites,
                 addReview,
                 addToMustWatch,
+                region,
+                setRegion,
+                language,
+                setLanguage,
             }}
         >
             {props.children}

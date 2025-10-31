@@ -18,14 +18,14 @@ export function todayLocalISODate() {
 
 // Format a release date from YYYY-MM-DD to "07 Nov 2025".
 // If the input is falsy or invalid, returns null.
-export function formatReleaseDate(dateString) {
+export function formatReleaseDate(dateString, locale = 'en-GB') {
     if (!dateString) return null;
     try {
-        // Use the user's locale for month names; ensure 2-digit day.
+        // Use the provided locale (e.g., 'en-US', 'es-ES') for month names; ensure 2-digit day.
         const d = new Date(dateString);
         if (Number.isNaN(d.getTime())) return null;
-        return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
-    } catch (e) {
+        return new Intl.DateTimeFormat(locale, { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
+    } catch {
         return null;
     }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { getMovieCredits } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../spinner";
@@ -10,9 +10,12 @@ import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from "@mui/icons-material/Person";
 
+import { MoviesContext } from '../../contexts/moviesContextValue';
+
 const MovieCredits = ({ movieId }) => {
+    const { language } = useContext(MoviesContext);
     const { data, error, isPending, isError } = useQuery({
-        queryKey: ['credits', { id: movieId }],
+        queryKey: ['credits', { id: movieId, language }],
         queryFn: getMovieCredits,
     });
 

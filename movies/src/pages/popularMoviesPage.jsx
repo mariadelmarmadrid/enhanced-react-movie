@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { getPopularMoviesPage } from "../api/tmdb-api";
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../components/spinner';
 import AddToPlaylistIcon from '../components/cardIcons/addToPlaylist';
+import { MoviesContext } from '../contexts/moviesContextValue';
 
 
-const PopularMoviesPage = (props) => {
+const PopularMoviesPage = () => {
 
+    const { region, language } = useContext(MoviesContext);
     const { data, error, isPending, isError } = useQuery({
-        queryKey: ['popularMovies'],
+        queryKey: ['popularMovies', { region, language }],
         queryFn: getPopularMoviesPage,
     })
 

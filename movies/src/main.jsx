@@ -33,8 +33,8 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <SiteHeader />
         <MoviesContextProvider>
+          <SiteHeader />
           <Routes>
             <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
             <Route path="/reviews/:id" element={<MovieReviewPage />} />
@@ -58,3 +58,4 @@ const App = () => {
 
 const rootElement = createRoot(document.getElementById("root"))
 rootElement.render(<App />);
+export default App;

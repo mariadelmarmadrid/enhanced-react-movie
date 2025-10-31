@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { getMovies } from "../api/tmdb-api";
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
+import { MoviesContext } from '../contexts/moviesContextValue';
 
 
-const HomePage = (props) => {
+const HomePage = () => {
 
+  const { region, language } = useContext(MoviesContext);
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ['discover'],
+    queryKey: ['discover', { region, language }],
     queryFn: getMovies,
   })
 
@@ -26,7 +28,6 @@ const HomePage = (props) => {
   // Redundant, but necessary to avoid app crashing.
   const favorites = movies.filter(m => m.favorite)
   localStorage.setItem('favorites', JSON.stringify(favorites))
-  const addToFavorites = (movieId) => true
 
   return (
     <PageTemplate

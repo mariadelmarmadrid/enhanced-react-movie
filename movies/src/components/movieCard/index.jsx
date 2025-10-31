@@ -15,13 +15,13 @@ import { formatReleaseDate } from '../../util';
 import { Link } from "react-router";
 import Avatar from '@mui/material/Avatar';
 import React, { useContext } from "react";
-import { MoviesContext } from "../../contexts/moviesContext";
+import { MoviesContext } from "../../contexts/moviesContextValue";
 
 
 
 
 export default function MovieCard({ movie, action }) {
-  const { favorites, addToFavorites } = useContext(MoviesContext);
+  const { favorites, language } = useContext(MoviesContext);
 
   if (favorites.find((id) => id === movie.id)) {
     movie.favorite = true;
@@ -61,7 +61,7 @@ export default function MovieCard({ movie, action }) {
           <Grid size={{ xs: 6 }}>
             <Typography variant="h6" component="p">
               <CalendarIcon fontSize="small" />
-              {formatReleaseDate(movie.release_date) || 'TBA'}
+              {formatReleaseDate(movie.release_date, language) || 'TBA'}
             </Typography>
           </Grid>
           <Grid size={{ xs: 6 }}>

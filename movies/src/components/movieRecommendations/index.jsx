@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { getMovieRecommendations } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../spinner";
@@ -10,9 +10,12 @@ import Grid from "@mui/material/Grid";
 import { Link } from "react-router";
 import img from '../../images/film-poster-placeholder.png';
 
+import { MoviesContext } from '../../contexts/moviesContextValue';
+
 const MovieRecommendations = ({ movieId }) => {
+    const { language } = useContext(MoviesContext);
     const { data, error, isPending, isError } = useQuery({
-        queryKey: ['recommendations', { id: movieId }],
+        queryKey: ['recommendations', { id: movieId, language }],
         queryFn: getMovieRecommendations,
     });
 

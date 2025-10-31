@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useForm, Controller } from "react-hook-form";
-import { MoviesContext } from "../../contexts/moviesContext";
+import { MoviesContext } from "../../contexts/moviesContextValue";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router";
@@ -96,7 +96,7 @@ const ReviewForm = ({ movie }) => {
     };
 
 
-    const handleSnackClose = (event) => {
+    const handleSnackClose = () => {
         setOpen(false);
         navigate("/movies/favorites");
     };
@@ -185,14 +185,18 @@ const ReviewForm = ({ movie }) => {
                 <Controller
                     control={control}
                     name="rating"
-                    render={({ field: { onChange, value } }) => (
+                    render={({ field }) => (
                         <TextField
                             id="select-rating"
                             select
                             variant="outlined"
                             label="Rating Select"
+                            {...field}
                             value={rating}
-                            onChange={handleRatingChange}
+                            onChange={(e) => {
+                                field.onChange(e);
+                                handleRatingChange(e);
+                            }}
                             helperText="Don't forget your rating"
                         >
                             {ratings.map((option) => (
