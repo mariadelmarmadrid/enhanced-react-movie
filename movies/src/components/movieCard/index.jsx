@@ -11,6 +11,7 @@ import StarRateIcon from "@mui/icons-material/StarRate";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import img from '../../images/film-poster-placeholder.png'
+import { formatReleaseDate } from '../../util';
 import { Link } from "react-router";
 import Avatar from '@mui/material/Avatar';
 import React, { useContext } from "react";
@@ -60,7 +61,7 @@ export default function MovieCard({ movie, action }) {
           <Grid size={{ xs: 6 }}>
             <Typography variant="h6" component="p">
               <CalendarIcon fontSize="small" />
-              {movie.release_date}
+              {formatReleaseDate(movie.release_date) || 'TBA'}
             </Typography>
           </Grid>
           <Grid size={{ xs: 6 }}>

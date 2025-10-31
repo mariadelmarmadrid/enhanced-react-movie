@@ -15,3 +15,17 @@ export function todayLocalISODate() {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+
+// Format a release date from YYYY-MM-DD to "07 Nov 2025".
+// If the input is falsy or invalid, returns null.
+export function formatReleaseDate(dateString) {
+    if (!dateString) return null;
+    try {
+        // Use the user's locale for month names; ensure 2-digit day.
+        const d = new Date(dateString);
+        if (Number.isNaN(d.getTime())) return null;
+        return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
+    } catch (e) {
+        return null;
+    }
+}
