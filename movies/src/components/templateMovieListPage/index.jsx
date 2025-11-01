@@ -1,48 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
 
-
 function MovieListPageTemplate({ movies, title, action }) {
     const [nameFilter, setNameFilter] = useState("");
-    const [genreFilter, setGenreFilter] = useState("0");
+    const [genreFilter, setGenreFilter] = useState("0");     // "All"
+    const [sortOrder, setSortOrder] = useState("default");   // Default (API order)
     const genreId = Number(genreFilter);
-
-    let displayedMovies = movies
-        .filter((m) => {
-            return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
-        })
-        .filter((m) => {
-            return genreId > 0 ? m.genre_ids.includes(genreId) : true;
-        });
 
     const handleChange = (type, value) => {
         if (type === "name") setNameFilter(value);
-        else setGenreFilter(value);
+        else if (type === "genre") setGenreFilter(value);
+        else if (type === "sort") setSortOrder(value);
     };
+
+    const displayedMovies = useMemo(() => {
+        // 1) filter by title + genre
+        let list = movies
+            .filter(m => (m.title || "").toLowerCase().includes(nameFilter.toLowerCase()))
+            .filter(m => (genreId > 0 ? (m.genre_ids || []).includes(genreId) : true));
+
+        // 2) sort
+        const copy = [...list];
+        switch (sortOrder) {
+            case "release_date.desc":
+                return copy.sort((a, b) => (b.release_date || "").localeCompare(a.release_date || ""));
+            case "release_date.asc":
+                return copy.sort((a, b) => (a.release_date || "").localeCompare(b.release_date || ""));
+            case "title.asc":
+                return copy.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+            case "default":
+            default:
+                return copy; // API order (no sorting)
+        }
+    }, [movies, nameFilter, genreId, sortOrder]);
 
     return (
         <Grid container>
-            <Grid size={12}>
+            {/* Header row */}
+            <Grid item xs={12}>
                 <Header title={title} />
             </Grid>
-            <Grid container sx={{ flex: "1 1 500px" }}>
-                <Grid
-                    key="find"
-                    size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
-                    sx={{ padding: "20px" }}
-                >
+
+            {/* Content row */}
+            <Grid container spacing={2} alignItems="flex-start" sx={{ width: "100%", m: 0 }}>
+                {/* LEFT: Filter sidebar */}
+                <Grid item xs={12} md={3} lg={2}>
                     <FilterCard
                         onUserInput={handleChange}
                         titleFilter={nameFilter}
                         genreFilter={genreFilter}
+                        sortOrder={sortOrder}
                     />
                 </Grid>
-                <MovieList action={action} movies={displayedMovies}></MovieList>
+
+                {/* RIGHT: Movies grid */}
+                <Grid item xs={12} md={9} lg={10} sx={{ minWidth: 0, flexGrow: 1 }}>
+                    <MovieList action={action} movies={displayedMovies} />
+                </Grid>
             </Grid>
+
         </Grid>
     );
 }
+
 export default MovieListPageTemplate;

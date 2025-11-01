@@ -25,17 +25,14 @@ const HomePage = () => {
 
   const movies = data.results;
 
-  // Redundant, but necessary to avoid app crashing.
   const favorites = movies.filter(m => m.favorite)
   localStorage.setItem('favorites', JSON.stringify(favorites))
 
   return (
     <PageTemplate
       title="Discover Movies"
-      movies={movies}
-      action={(movie) => {
-        return <AddToFavoritesIcon movie={movie} />
-      }}
+      movies={data?.results || []}
+      action={(movie) => <AddToFavoritesIcon movie={movie} />}
     />
   );
 
