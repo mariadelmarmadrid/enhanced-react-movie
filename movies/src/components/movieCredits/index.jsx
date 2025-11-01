@@ -9,6 +9,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from "@mui/icons-material/Person";
+import { Link } from "react-router";
 
 import { MoviesContext } from '../../contexts/moviesContextValue';
 
@@ -47,7 +48,7 @@ const MovieCredits = ({ movieId }) => {
                 <Grid container spacing={2} sx={{ marginBottom: 4 }}>
                     {cast.slice(0, 6).map((person) => (
                         <Grid key={person.id} size={{ xs: 6, sm: 4, md: 2 }}>
-                            <Card sx={{ height: '100%' }}>
+                            <Card sx={{ height: '100%' }} component={Link} to={`/person/${person.id}`}>
                                 {person.profile_path ? (
                                     <CardMedia
                                         sx={{ height: 250 }}
