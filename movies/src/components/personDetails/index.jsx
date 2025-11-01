@@ -4,8 +4,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { Link } from 'react-router';
+import KnownForCarousel from "../knownForCarousel";
+import FilmographyList from "../filmographyList";
 
-const PersonDetails = ({ person, knownFor = [] }) => {
+const PersonDetails = ({ person, knownFor = [], filmography = [] }) => {
     return (
         <>
             <Paper elevation={0} sx={{ p: 2, mb: 2 }}>
@@ -33,6 +35,13 @@ const PersonDetails = ({ person, knownFor = [] }) => {
                         </Box>
                     ))}
                 </Box>
+            </Box>
+
+            <Box sx={{ mt: 1 }}>
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                    Filmography
+                </Typography>
+                <FilmographyList items={filmography} />
             </Box>
         </>
     );
