@@ -3,7 +3,7 @@ import { getNowPlayingMovies } from "../api/tmdb-api";
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../components/spinner';
-import AddToPlaylistIcon from '../components/cardIcons/addToPlaylist';
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
 import { MoviesContext } from '../contexts/moviesContextValue';
 
 
@@ -27,11 +27,9 @@ const NowPlayingMoviesPage = () => {
 
     return (
         <PageTemplate
-            title= "Now Playing Movies"
-            movies = { movies }
-            action = {(movie) => {
-                return <AddToPlaylistIcon movie={ movie } />
-            }}
+            title="Now Playing Movies"
+            movies={data?.results || []}
+            action={(movie) => <AddToFavoritesIcon movie={movie} />}
         />
     );
 

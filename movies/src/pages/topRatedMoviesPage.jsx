@@ -3,7 +3,7 @@ import { getTopRatedMovies } from "../api/tmdb-api";
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../components/spinner';
-import AddToPlaylistIcon from '../components/cardIcons/addToPlaylist';
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
 import { MoviesContext } from '../contexts/moviesContextValue';
 
 
@@ -27,11 +27,9 @@ const TopRatedMoviesPage = () => {
 
     return (
         <PageTemplate
-            title= "Top Rated Movies"
-            movies = { movies }
-            action = {(movie) => {
-                return <AddToPlaylistIcon movie={ movie } />
-            }}
+            title="Top Rated Movies"
+            movies={data?.results || []}
+            action={(movie) => <AddToFavoritesIcon movie={movie} />}
         />
     );
 

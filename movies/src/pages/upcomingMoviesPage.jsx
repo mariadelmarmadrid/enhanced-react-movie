@@ -3,7 +3,7 @@ import { getUpcomingMovies } from "../api/tmdb-api";
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../components/spinner';
-import AddToPlaylistIcon from '../components/cardIcons/addToPlaylist';
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
 import { todayLocalISODate } from "../util";
 import { MoviesContext } from '../contexts/moviesContextValue';
 
@@ -33,11 +33,9 @@ const UpcomingMoviesPage = () => {
 
     return (
         <PageTemplate
-            title= "Upcoming Movies"
-            movies = { unreleasedMovies }
-            action = {(movie) => {
-                return <AddToPlaylistIcon movie={ movie } />
-            }}
+            title="Upcoming Movies"
+            movies={data?.results || []}
+            action={(movie) => <AddToFavoritesIcon movie={movie} />}
         />
     );
 
