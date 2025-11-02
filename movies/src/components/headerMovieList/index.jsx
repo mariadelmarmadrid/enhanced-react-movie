@@ -6,25 +6,29 @@ const Header = ({ title }) => {
   return (
     <Paper
       component="div"
-      elevation={0}
       sx={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
-        py: 2,
+        gap: 1,
         mb: 2,
-        backgroundColor: "background.paper",
+        px: 2,
+        py: 1.25,
         borderRadius: 2,
+        boxShadow: "none",
+        borderBottom: "1px solid rgba(0,0,0,0.08)",
+        background: "transparent",
       }}
     >
-      <Typography
-        variant="h4"
-        component="h3"
-        sx={{ fontWeight: 700, textAlign: "center" }}
-      >
+      {/* back / forward buttons stay the same */}
+
+      <Typography variant="h4" component="h1" sx={{ fontWeight: 800 }}>
         {title}
       </Typography>
+
+      {/* forward button … */}
     </Paper>
+
   );
 };
 
