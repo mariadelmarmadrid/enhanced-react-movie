@@ -11,7 +11,7 @@ const safeParse = (key, fallback) => {
 };
 
 const MoviesContextProvider = (props) => {
-    // Favorites (persist)
+    // Favorites 
     const [favorites, setFavorites] = useState(() =>
         safeParse("favoritesIds", [])
     );
@@ -19,12 +19,12 @@ const MoviesContextProvider = (props) => {
     // Reviews
     const [myReviews, setMyReviews] = useState({});
 
-    // ✅ Watchlist replaces "mustWatch" (persist)
+    // Watchlist 
     const [watchlist, setWatchlist] = useState(() =>
         safeParse("watchlistIds", [])
     );
 
-    // Region & language (persist)
+    // Region & language
     const [region, setRegion] = useState(() => {
         try {
             return (
@@ -63,7 +63,7 @@ const MoviesContextProvider = (props) => {
         setMyReviews((prev) => ({ ...prev, [movie.id]: review }));
     };
 
-    // ---------------- Watchlist (NEW) ----------------
+    // ---------------- Watchlist ----------------
     const addToWatchlist = (movie) => {
         setWatchlist((prev) => (prev.includes(movie.id) ? prev : [...prev, movie.id]));
     };
@@ -116,7 +116,7 @@ const MoviesContextProvider = (props) => {
             myReviews,
             addReview,
 
-            // ✅ watchlist
+            // watchlist
             watchlist,
             addToWatchlist,
             removeFromWatchlist,

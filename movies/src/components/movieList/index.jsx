@@ -8,9 +8,9 @@ const MovieList = ({ movies = [], action }) => (
       gridTemplateColumns: {
         xs: "1fr",
         sm: "repeat(2, 1fr)",
-        md: "repeat(4, 1fr)",       // ✅ 4 across on desktop
+        md: "repeat(4, 1fr)",       //  4 across on desktop
       },
-      gap: { xs: 2, md: 3 },        // nicer spacing between tiles
+      gap: { xs: 2, md: 3 },        
       alignItems: "stretch",
     }}
   >

@@ -9,7 +9,7 @@ import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
 const WatchlistMoviesPage = () => {
     const { watchlist: movieIds } = useContext(MoviesContext);
 
-    // If watchlist is empty, render template with no movies
+
     if (!movieIds || movieIds.length === 0) {
         return (
             <PageTemplate
@@ -20,7 +20,7 @@ const WatchlistMoviesPage = () => {
         );
     }
 
-    // Create an array of queries and run in parallel.
+   
     const movieQueries = useQueries({
         queries: movieIds.map((movieId) => ({
             queryKey: ["movie", { id: movieId }],
@@ -28,11 +28,11 @@ const WatchlistMoviesPage = () => {
         })),
     });
 
-    // Loading state if any of the parallel queries is still pending
+    
     const isPending = movieQueries.some((q) => q.isPending);
     if (isPending) return <Spinner />;
 
-    // Collect successful results; map genres -> genre_ids for the filter
+  
     const movies = movieQueries
         .filter((q) => q.data)
         .map((q) => {

@@ -28,8 +28,8 @@ export default function FilterMoviesCard(props) {
 
     const handle = (type) => (e) => props.onUserInput(type, e.target.value);
 
-    const purple = "#d1c4e9"; // 💜 unified color for bar and boxes
-    const border = "#b39ddb"; // subtle darker border
+    const purple = "#d1c4e9"; 
+    const border = "#b39ddb"; 
     const text = "#1a1a1a";
 
     return (
@@ -41,7 +41,7 @@ export default function FilterMoviesCard(props) {
                 py: 1,
                 display: "flex",
                 alignItems: "center",
-                bgcolor: purple, // 💜 background same as boxes
+                bgcolor: purple,
                 border: `1px solid ${border}`,
                 boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
             }}

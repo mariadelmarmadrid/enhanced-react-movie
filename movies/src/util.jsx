@@ -17,11 +17,10 @@ export function todayLocalISODate() {
 }
 
 // Format a release date from YYYY-MM-DD to "07 Nov 2025".
-// If the input is falsy or invalid, returns null.
 export function formatReleaseDate(dateString, locale = 'en-GB') {
     if (!dateString) return null;
     try {
-        // Use the provided locale (e.g., 'en-US', 'es-ES') for month names; ensure 2-digit day.
+        
         const d = new Date(dateString);
         if (Number.isNaN(d.getTime())) return null;
         return new Intl.DateTimeFormat(locale, { day: '2-digit', month: 'short', year: 'numeric' }).format(d);

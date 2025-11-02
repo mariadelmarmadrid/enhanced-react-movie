@@ -20,13 +20,11 @@ const Header = ({ title }) => {
         background: "transparent",
       }}
     >
-      {/* back / forward buttons stay the same */}
 
       <Typography variant="h4" component="h1" sx={{ fontWeight: 800 }}>
         {title}
       </Typography>
 
-      {/* forward button … */}
     </Paper>
 
   );

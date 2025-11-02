@@ -22,7 +22,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
-// quick color system (adjust if you like)
+
 const COLORS = {
     gradFrom: "#5B2BE0",
     gradTo: "#9C27B0",
@@ -196,45 +196,7 @@ const SiteHeader = () => {
                             </Stack>
                         )}
 
-                        {/* Mobile menu button */}
-                        {isMobile && (
-                            <IconButton
-                                aria-label="menu"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                sx={{
-                                    color: COLORS.text,
-                                    borderRadius: 2,
-                                    "&:hover": { bgcolor: COLORS.pillHover },
-                                }}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                        )}
-
-                        {/* Mobile menu popup */}
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={() => setAnchorEl(null)}
-                            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                            transformOrigin={{ vertical: "top", horizontal: "right" }}
-                            PaperProps={{
-                                sx: {
-                                    mt: 1,
-                                    minWidth: 200,
-                                    borderRadius: 2,
-                                },
-                            }}
-                        >
-                            {menuOptions.map((opt) => (
-                                <MenuItem key={opt.label} onClick={() => handleMenuSelect(opt.path)}>
-                                    {opt.label}
-                                </MenuItem>
-                            ))}
-                        </Menu>
+                        
                     </Box>
                 </Toolbar>
             </AppBar>

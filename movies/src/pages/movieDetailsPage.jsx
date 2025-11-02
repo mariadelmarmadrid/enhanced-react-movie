@@ -4,7 +4,6 @@ import MovieDetails from "../components/movieDetails/";
 import PageTemplate from "../components/templateMoviePage";
 import MovieCredits from "../components/movieCredits/";
 import MovieRecommendations from "../components/movieRecommendations/";
-//import useMovie from "../hooks/useMovie";
 import { getMovie } from '../api/tmdb-api'
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../components/spinner'

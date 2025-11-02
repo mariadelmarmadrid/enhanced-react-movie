@@ -12,14 +12,10 @@ import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
-
 import img from "../../images/film-poster-placeholder.png";
 import { formatReleaseDate } from "../../util";
 import { MoviesContext } from "../../contexts/moviesContextValue";
-
-// your existing card icons
-import AddToPlaylistIcon from "../cardIcons/addToPlaylist"; // watchlist
-// `action(movie)` will still render your AddToFavoritesIcon from the page
+import AddToPlaylistIcon from "../cardIcons/addToPlaylist"; 
 
 export default function MovieCard({ movie, action }) {
   const { favorites, language } = useContext(MoviesContext);
@@ -77,7 +73,7 @@ export default function MovieCard({ movie, action }) {
               color: "white",
               px: 1,
               py: 0.25,
-              borderRadius: 999,           // pill
+              borderRadius: 999,           
               display: "inline-flex",
               alignItems: "center",
               gap: 0.5,
@@ -114,9 +110,9 @@ export default function MovieCard({ movie, action }) {
             sx={{
               fontWeight: 600,
               lineHeight: 1.25,
-              display: "-webkit-box",      // enables line clamp
+              display: "-webkit-box",      
               WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2,          // <= up to 2 lines
+              WebkitLineClamp: 2,         
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "normal",
