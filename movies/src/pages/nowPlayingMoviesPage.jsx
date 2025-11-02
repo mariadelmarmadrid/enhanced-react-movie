@@ -1,37 +1,39 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getNowPlayingMovies } from "../api/tmdb-api";
-import PageTemplate from '../components/templateMovieListPage';
-import { useQuery } from '@tanstack/react-query';
-import Spinner from '../components/spinner';
-import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
-import { MoviesContext } from '../contexts/moviesContextValue';
-
+import PageTemplate from "../components/templateMovieListPage";
+import Spinner from "../components/spinner";
+import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
+import { MoviesContext } from "../contexts/moviesContextValue";
 
 const NowPlayingMoviesPage = () => {
-
     const { region, language } = useContext(MoviesContext);
+    const [page, setPage] = useState(1);
+
     const { data, error, isPending, isError } = useQuery({
-        queryKey: ['nowPlayingMovies', { region, language }],
+        queryKey: ["nowPlayingMovies", { region, language, page }],
         queryFn: getNowPlayingMovies,
-    })
+        keepPreviousData: true,
+    });
 
-    if (isPending) {
-        return <Spinner />
-    }
+    if (isPending) return <Spinner />;
+    if (isError) return <h1>{error.message}</h1>;
 
-    if (isError) {
-        return <h1>{ error.message } </h1>
-    }
-
-    const movies = data.results;
+    const handlePage = (_e, p) => {
+        setPage(p);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     return (
         <PageTemplate
-            title="Now Playing Movies"
+            title="Now Playing"
             movies={data?.results || []}
             action={(movie) => <AddToFavoritesIcon movie={movie} />}
+            page={page}
+            totalPages={data?.total_pages ?? 1}
+            onPageChange={handlePage}
         />
     );
-
 };
+
 export default NowPlayingMoviesPage;
