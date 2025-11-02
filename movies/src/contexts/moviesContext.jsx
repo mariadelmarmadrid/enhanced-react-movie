@@ -1,99 +1,138 @@
-import React, { useState, useEffect } from "react";
-import { MoviesContext } from './moviesContextValue';
+import React, { useState, useEffect, useMemo } from "react";
+import { MoviesContext } from "./moviesContextValue";
+
+const safeParse = (key, fallback) => {
+    try {
+        const v = localStorage.getItem(key);
+        return v ? JSON.parse(v) : fallback;
+    } catch {
+        return fallback;
+    }
+};
 
 const MoviesContextProvider = (props) => {
-    const [favorites, setFavorites] = useState([])
-    const [myReviews, setMyReviews] = useState({})
-    const [mustWatch, setMustWatch] = useState([])
+    // Favorites (persist)
+    const [favorites, setFavorites] = useState(() =>
+        safeParse("favoritesIds", [])
+    );
 
-    // region: ISO 3166-1 alpha-2 code, persisted in localStorage
+    // Reviews
+    const [myReviews, setMyReviews] = useState({});
+
+    // ✅ Watchlist replaces "mustWatch" (persist)
+    const [watchlist, setWatchlist] = useState(() =>
+        safeParse("watchlistIds", [])
+    );
+
+    // Region & language (persist)
     const [region, setRegion] = useState(() => {
         try {
-            return localStorage.getItem('tmdb_region') || import.meta.env.VITE_TMDB_REGION || 'IE'
+            return (
+                localStorage.getItem("tmdb_region") ||
+                import.meta.env.VITE_TMDB_REGION ||
+                "IE"
+            );
         } catch {
-            return import.meta.env.VITE_TMDB_REGION || 'IE'
+            return import.meta.env.VITE_TMDB_REGION || "IE";
         }
-    })
+    });
 
-    // language: e.g. en-US, es-ES, persisted in localStorage
     const [language, setLanguage] = useState(() => {
         try {
-            return localStorage.getItem('tmdb_language') || import.meta.env.VITE_TMDB_LANGUAGE || 'en-US'
+            return (
+                localStorage.getItem("tmdb_language") ||
+                import.meta.env.VITE_TMDB_LANGUAGE ||
+                "en-US"
+            );
         } catch {
-            return import.meta.env.VITE_TMDB_LANGUAGE || 'en-US'
+            return import.meta.env.VITE_TMDB_LANGUAGE || "en-US";
         }
-    })
+    });
 
-    useEffect(() => {
-        console.log(mustWatch);
-    }, [mustWatch]);
-    
-
+    // ---------------- Favorites ----------------
     const addToFavorites = (movie) => {
-        let newFavorites = [];
-        if (!favorites.includes(movie.id)) {
-            newFavorites = [...favorites, movie.id];
-        }
-        else {
-            newFavorites = [...favorites];
-        }
-        setFavorites(newFavorites)
+        setFavorites((prev) => (prev.includes(movie.id) ? prev : [...prev, movie.id]));
     };
 
-    // We will use this function in the next step
     const removeFromFavorites = (movie) => {
-        setFavorites(favorites.filter(
-            (mId) => mId !== movie.id
-        ))
+        setFavorites((prev) => prev.filter((id) => id !== movie.id));
     };
 
+    // ---------------- Reviews ----------------
     const addReview = (movie, review) => {
-        setMyReviews({ ...myReviews, [movie.id]: review })
-    };
-    //console.log(myReviews);
-
-    const addToMustWatch = (movie) => {
-        if (!mustWatch.includes(movie.id)) {
-            setMustWatch([...mustWatch, movie.id]);
-            console.log([...mustWatch, movie.id]); 
-        }
+        setMyReviews((prev) => ({ ...prev, [movie.id]: review }));
     };
 
-    // persist region and language selection
+    // ---------------- Watchlist (NEW) ----------------
+    const addToWatchlist = (movie) => {
+        setWatchlist((prev) => (prev.includes(movie.id) ? prev : [...prev, movie.id]));
+    };
+
+    const removeFromWatchlist = (movie) => {
+        setWatchlist((prev) => prev.filter((id) => id !== movie.id));
+    };
+
+    const toggleWatchlist = (movieId) => {
+        setWatchlist((prev) =>
+            prev.includes(movieId) ? prev.filter((id) => id !== movieId) : [...prev, movieId]
+        );
+    };
+
+    const isInWatchlist = (movieId) => watchlist.includes(movieId);
+
+    // ---------------- Persist ----------------
     useEffect(() => {
         try {
-            localStorage.setItem('tmdb_region', region);
-        } catch {
-            // ignore
-        }
+            localStorage.setItem("favoritesIds", JSON.stringify(favorites));
+        } catch { }
+    }, [favorites]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("watchlistIds", JSON.stringify(watchlist));
+        } catch { }
+    }, [watchlist]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("tmdb_region", region);
+        } catch { }
     }, [region]);
 
     useEffect(() => {
         try {
-            localStorage.setItem('tmdb_language', language);
-        } catch {
-            // ignore
-        }
+            localStorage.setItem("tmdb_language", language);
+        } catch { }
     }, [language]);
 
-    return (
-        <MoviesContext.Provider
-            value={{
-                favorites,
-                addToFavorites,
-                removeFromFavorites,
-                addReview,
-                addToMustWatch,
-                region,
-                setRegion,
-                language,
-                setLanguage,
-            }}
-        >
-            {props.children}
-        </MoviesContext.Provider>
+    const value = useMemo(
+        () => ({
+            // favorites
+            favorites,
+            addToFavorites,
+            removeFromFavorites,
+
+            // reviews
+            myReviews,
+            addReview,
+
+            // ✅ watchlist
+            watchlist,
+            addToWatchlist,
+            removeFromWatchlist,
+            toggleWatchlist,
+            isInWatchlist,
+
+            // settings
+            region,
+            setRegion,
+            language,
+            setLanguage,
+        }),
+        [favorites, myReviews, watchlist, region, language]
     );
 
+    return <MoviesContext.Provider value={value}>{props.children}</MoviesContext.Provider>;
 };
 
 export default MoviesContextProvider;
