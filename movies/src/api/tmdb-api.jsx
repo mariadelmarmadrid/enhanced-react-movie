@@ -1,17 +1,12 @@
 const { VITE_TMDB_KEY, VITE_TMDB_LANGUAGE, VITE_TMDB_REGION } = import.meta.env;
 const TMDB = "https://api.themoviedb.org/3";
 
-// --- helpers ---------------------------------------------------------------
+// --- helpers 
 
 const defaultLang = VITE_TMDB_LANGUAGE || "en-US";
 const defaultRegion = VITE_TMDB_REGION || "IE";
 
-/**
- * Make a TMDB request with unified error handling.
- * @param {string} path - Path after /3, e.g. "movie/popular"
- * @param {object} params - Query params (merged with api_key)
- * @returns {Promise<any>}
- */
+
 async function fetchTMDB(path, params = {}) {
     const url = new URL(`${TMDB}/${path}`);
     url.searchParams.set("api_key", VITE_TMDB_KEY);
@@ -51,7 +46,7 @@ function optsFromKey(args) {
     };
 }
 
-// --- Movies: discovery & lists --------------------------------------------
+// --- Movies: discovery & lists
 
 /**
  * Discover movies (Home). Supports pagination.
@@ -78,8 +73,6 @@ export const getPopularMovies = (args) => {
     return fetchTMDB("movie/popular", { language, region, page });
 };
 
-// Backward-compatible alias if your pages import this older name.
-export const getPopularMoviesPage = getPopularMovies;
 
 /**
  * Now Playing. Supports pagination.
@@ -114,7 +107,7 @@ export const getTopRatedMovies = (args) => {
     return fetchTMDB("movie/top_rated", { language, region, page });
 };
 
-// --- Single movie & related ------------------------------------------------
+// --- Single movie & related
 
 /**
  * Single movie details.
@@ -161,7 +154,7 @@ export const getMovieCredits = (args) => {
     return fetchTMDB(`movie/${id}/credits`, { language });
 };
 
-// --- Genres ----------------------------------------------------------------
+// --- Genres
 
 /**
  * Genres list.
@@ -172,7 +165,7 @@ export const getGenres = (args) => {
     return fetchTMDB("genre/movie/list", { language });
 };
 
-// --- People ----------------------------------------------------------------
+// --- People
 
 /**
  * Person details.
