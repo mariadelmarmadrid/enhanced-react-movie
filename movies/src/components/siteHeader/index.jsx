@@ -24,13 +24,13 @@ const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 
 const COLORS = {
-    gradFrom: "#5B2BE0",
-    gradTo: "#9C27B0",
-    text: "#FFFFFF",
-    textMuted: "rgba(255,255,255,0.75)",
-    pillHover: "rgba(255,255,255,0.14)",
-    pillActive: "rgba(255,255,255,0.22)",
-    border: "rgba(255,255,255,0.2)",
+  gradFrom: "#7E57C2", 
+  gradTo: "#AB47BC",   
+  text: "#FFFFFF",
+  textMuted: "rgba(255,255,255,0.75)",
+  pillHover: "rgba(255,255,255,0.14)",
+  pillActive: "rgba(255,255,255,0.22)",
+  border: "rgba(255,255,255,0.2)",
 };
 
 const SiteHeader = () => {
