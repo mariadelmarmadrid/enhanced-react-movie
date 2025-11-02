@@ -5,12 +5,12 @@ const MovieList = ({ movies = [], action }) => (
   <Box
     sx={{
       display: "grid",
-      gap: 3,                                   // spacing between cards
       gridTemplateColumns: {
-        xs: "1fr",                              // 1 per row on phones
-        sm: "repeat(2, 1fr)",                   // 2 per row on small screens
-        md: "repeat(4, 1fr)",                   // ✅ 4 per row on desktop+
+        xs: "1fr",
+        sm: "repeat(2, 1fr)",
+        md: "repeat(4, 1fr)",       // ✅ 4 across on desktop
       },
+      gap: { xs: 2, md: 3 },        // nicer spacing between tiles
       alignItems: "stretch",
     }}
   >

@@ -3,8 +3,6 @@ import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 function MovieListPageTemplate({ movies, title, action }) {
     const [nameFilter, setNameFilter] = useState("");
@@ -37,52 +35,25 @@ function MovieListPageTemplate({ movies, title, action }) {
     }, [movies, nameFilter, genreId, sortOrder]);
 
     return (
-        <Grid container>
-            {/* Centered title */}
+        <Grid container spacing={2}>
+            {/* Title */}
             <Grid item xs={12}>
                 <Header title={title} />
             </Grid>
 
-            {/* Sidebar + content (no wrap) */}
+            {/* Full-width horizontal filter bar */}
             <Grid item xs={12}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        gap: 3,
-                        alignItems: "flex-start",
-                        flexWrap: { xs: "wrap", md: "nowrap" }, // desktop: keep in one row
-                        px: { xs: 1.5, md: 3 },                 // page gutter
-                    }}
-                >
-                    {/* LEFT: fixed-width sidebar */}
-                    <Box
-                        sx={{
-                            flex: "0 0 250px",
-                            width: { xs: "100%", md: 320 },
-                            position: { md: "sticky" },
-                            top: { md: 88 },              // under top app bar
-                        }}
-                    >
-                        <FilterCard
-                            onUserInput={handleChange}
-                            titleFilter={nameFilter}
-                            genreFilter={genreFilter}
-                            sortOrder={sortOrder}
-                        />
-                    </Box>
+                <FilterCard
+                    onUserInput={handleChange}
+                    titleFilter={nameFilter}
+                    genreFilter={genreFilter}
+                    sortOrder={sortOrder}
+                />
+            </Grid>
 
-                    {/* RIGHT: fluid movie grid */}
-                    <Box
-                        sx={{
-                            flex: "1 1 100%",     // allow full remaining width
-                            minWidth: 0,
-                            pr: { xs: 0, md: 2 }, // small right padding
-                        }}
-                    >
-                        <MovieList action={action} movies={displayedMovies} />
-                    </Box>
-
-                </Box>
+            {/* Movies grid */}
+            <Grid item xs={12}>
+                <MovieList action={action} movies={displayedMovies} />
             </Grid>
         </Grid>
     );

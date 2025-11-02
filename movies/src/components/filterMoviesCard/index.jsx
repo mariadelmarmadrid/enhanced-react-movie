@@ -1,5 +1,5 @@
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,14 +7,10 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
-import img from "../../images/pexels-dziana-hasanbekava-5480827.jpg";
 import { getGenres } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../spinner";
-
-const controlSx = { mt: 1.5, width: "100%" };
 
 export default function FilterMoviesCard(props) {
     const { data, error, isPending, isError } = useQuery({
@@ -34,40 +30,52 @@ export default function FilterMoviesCard(props) {
 
     return (
         <Card
-            variant="outlined"
+            elevation={2}
             sx={{
-                position: "sticky",
-                top: 88, // stays under the top app bar
+                width: "100%",
                 borderRadius: 3,
+                px: { xs: 2, md: 3 },
+                py: { xs: 1.25, md: 1.5 },      // low height
+                display: "flex",
+                alignItems: "center",
                 overflow: "hidden",
-                backgroundColor: "background.paper",
+                border: "1px solid rgba(0,0,0,0.06)",
+                background: "linear-gradient(135deg, #ede7f6 0%, #f3e5f5 100%)",
             }}
         >
-            <Box
-                sx={{
-                    height: 140,
-                    backgroundImage: `linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url(${img})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                }}
-            />
-            <CardContent sx={{ p: 2.25 }}>
-                <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                    <SearchIcon sx={{ mr: 1, verticalAlign: "text-bottom" }} />
-                    Filter the movies
+            <Stack
+                direction={{ xs: "column", md: "row" }}
+                spacing={{ xs: 1.25, md: 2 }}
+                alignItems="center"
+                sx={{ width: "100%" }}
+            >
+                {/* Small label on the left */}
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        fontWeight: 700,
+                        minWidth: { md: 150 },
+                    }}
+                >
+                    <SearchIcon color="primary" fontSize="small" />
+                    Filter Movies
                 </Typography>
 
+                {/* Search expands to fill row */}
                 <TextField
-                    fullWidth
-                    size="small"
                     label="Search"
-                    variant="outlined"
+                    type="search"
                     value={props.titleFilter}
                     onChange={handle("name")}
-                    sx={controlSx}
+                    size="small"
+                    sx={{ flex: 1, width: { xs: "100%", md: "auto" } }}
                 />
 
-                <FormControl fullWidth size="small" sx={controlSx}>
+                {/* Genre */}
+                <FormControl size="small" sx={{ minWidth: 200 }}>
                     <InputLabel id="genre-label">Genre</InputLabel>
                     <Select
                         labelId="genre-label"
@@ -76,15 +84,16 @@ export default function FilterMoviesCard(props) {
                         value={props.genreFilter}
                         onChange={handle("genre")}
                     >
-                        {genres.map((g) => (
-                            <MenuItem key={g.id} value={g.id}>
-                                {g.name}
+                        {genres.map((genre) => (
+                            <MenuItem key={genre.id} value={genre.id}>
+                                {genre.name}
                             </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
 
-                <FormControl fullWidth size="small" sx={controlSx}>
+                {/* Sort */}
+                <FormControl size="small" sx={{ minWidth: 200 }}>
                     <InputLabel id="sort-label">Sort by</InputLabel>
                     <Select
                         labelId="sort-label"
@@ -93,18 +102,18 @@ export default function FilterMoviesCard(props) {
                         value={props.sortOrder || "default"}
                         onChange={handle("sort")}
                     >
-                        <MenuItem value="default">Default</MenuItem>
+                        <MenuItem value="default">Default (API order)</MenuItem>
                         <MenuItem value="release_date.desc">Newest</MenuItem>
                         <MenuItem value="release_date.asc">Oldest</MenuItem>
                         <MenuItem value="title.asc">Title A–Z</MenuItem>
                     </Select>
                 </FormControl>
 
-                <Divider sx={{ my: 2 }} />
-                <Typography variant="caption" color="text.secondary">
-                    Tip: You can combine search + genre + sort.
-                </Typography>
-            </CardContent>
+                {/* Right tip (wraps under on mobile) */}
+                <Box sx={{ flex: { md: 0 }, whiteSpace: "nowrap", color: "text.secondary", fontSize: 12 }}>
+                    tip: search + genre + sort
+                </Box>
+            </Stack>
         </Card>
     );
 }

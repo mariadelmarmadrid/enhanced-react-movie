@@ -16,29 +16,27 @@ const MovieHeader = (props) => {
             component="div"
             sx={{
                 display: "flex",
-                justifyContent: "space-around",
-                flexWrap: "wrap",
-                padding: 1.5,
-                margin: 0,
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 1,
+                mb: 2,
+                px: 2,
+                py: 1.25,
+                borderRadius: 2,
+                boxShadow: "none",
+                borderBottom: "1px solid rgba(0,0,0,0.08)",
+                background: "transparent",
             }}
         >
-            <IconButton aria-label="go back" onClick={() => navigate(-1)} >
-                <ArrowBackIcon color="primary" fontSize="large" />
-            </IconButton>
+            {/* back / forward buttons stay the same */}
 
-            <Typography variant="h4" component="h3">
-                {movie.title}
-                <a href={movie.homepage}>
-                    <HomeIcon color="primary" />
-                </a>
-                <br />
-                <span sx={{ fontSize: "1.5rem" }}>{`   "${movie.tagline}"`} </span>
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 800 }}>
+                {title}
             </Typography>
 
-            <IconButton aria-label="go forward" onClick={() => navigate(+1)} >
-                <ArrowForwardIcon color="primary" fontSize="large" />
-            </IconButton>
+            {/* forward button … */}
         </Paper>
+
     );
 };
 

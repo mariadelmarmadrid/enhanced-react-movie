@@ -39,17 +39,23 @@ export default function MovieCard({ movie, action }) {
   return (
     <Card
       sx={{
-        width: "100%",     // fill the grid cell width (keeps all cards same width)
+        width: "100%",
         height: "100%",
         borderRadius: 3,
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
-        transition: "transform .18s, box-shadow .18s",
-        "&:hover": { transform: "translateY(-4px)", boxShadow: "0 10px 22px rgba(0,0,0,0.24)" },
+        outline: "1px solid transparent",
+        transition: "transform .18s, box-shadow .18s, outline-color .18s",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: "0 16px 32px rgba(0,0,0,.18)",
+          outlineColor: "rgba(93, 53, 247, .25)",
+        },
       }}
     >
+
 
       {/* Whole card navigates to details */}
       <CardActionArea component={Link} to={`/movies/${movie.id}`} sx={{ alignItems: "stretch" }}>
@@ -71,16 +77,18 @@ export default function MovieCard({ movie, action }) {
               color: "white",
               px: 1,
               py: 0.25,
-              borderRadius: 1.5,
+              borderRadius: 999,           // pill
               display: "inline-flex",
               alignItems: "center",
               gap: 0.5,
-              fontSize: 13,
+              fontSize: 12,
+              fontWeight: 700,
             }}
           >
             <StarRateIcon sx={{ fontSize: 16 }} />
             {rating}
           </Box>
+
 
           {/* Favorite badge */}
           {isFav && (
@@ -144,11 +152,16 @@ export default function MovieCard({ movie, action }) {
           pt: 0.5,
           display: "flex",
           justifyContent: "space-between",
+          "& .MuiIconButton-root": {
+            color: "primary.main",
+            "&:hover": { color: "primary.light" },
+          },
         }}
       >
-        {action(movie)}               {/* your existing Favorite icon button */}
-        <AddToPlaylistIcon movie={movie} />  {/* new Watchlist icon button */}
+        {action(movie)}
+        <AddToPlaylistIcon movie={movie} />
       </CardActions>
+
     </Card>
   );
 }
