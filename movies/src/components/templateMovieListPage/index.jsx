@@ -3,11 +3,13 @@ import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 function MovieListPageTemplate({ movies, title, action }) {
     const [nameFilter, setNameFilter] = useState("");
-    const [genreFilter, setGenreFilter] = useState("0");     // "All"
-    const [sortOrder, setSortOrder] = useState("default");   // Default (API order)
+    const [genreFilter, setGenreFilter] = useState("0");
+    const [sortOrder, setSortOrder] = useState("default");
     const genreId = Number(genreFilter);
 
     const handleChange = (type, value) => {
@@ -17,12 +19,10 @@ function MovieListPageTemplate({ movies, title, action }) {
     };
 
     const displayedMovies = useMemo(() => {
-        // 1) filter by title + genre
         let list = movies
-            .filter(m => (m.title || "").toLowerCase().includes(nameFilter.toLowerCase()))
-            .filter(m => (genreId > 0 ? (m.genre_ids || []).includes(genreId) : true));
+            .filter((m) => (m.title || "").toLowerCase().includes(nameFilter.toLowerCase()))
+            .filter((m) => (genreId > 0 ? (m.genre_ids || []).includes(genreId) : true));
 
-        // 2) sort
         const copy = [...list];
         switch (sortOrder) {
             case "release_date.desc":
@@ -31,37 +31,59 @@ function MovieListPageTemplate({ movies, title, action }) {
                 return copy.sort((a, b) => (a.release_date || "").localeCompare(b.release_date || ""));
             case "title.asc":
                 return copy.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
-            case "default":
             default:
-                return copy; // API order (no sorting)
+                return copy;
         }
     }, [movies, nameFilter, genreId, sortOrder]);
 
     return (
         <Grid container>
-            {/* Header row */}
+            {/* Centered title */}
             <Grid item xs={12}>
                 <Header title={title} />
             </Grid>
 
-            {/* Content row */}
-            <Grid container spacing={2} alignItems="flex-start" sx={{ width: "100%", m: 0 }}>
-                {/* LEFT: Filter sidebar */}
-                <Grid item xs={12} md={3} lg={2}>
-                    <FilterCard
-                        onUserInput={handleChange}
-                        titleFilter={nameFilter}
-                        genreFilter={genreFilter}
-                        sortOrder={sortOrder}
-                    />
-                </Grid>
+            {/* Sidebar + content (no wrap) */}
+            <Grid item xs={12}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        gap: 3,
+                        alignItems: "flex-start",
+                        flexWrap: { xs: "wrap", md: "nowrap" }, // desktop: keep in one row
+                        px: { xs: 1.5, md: 3 },                 // page gutter
+                    }}
+                >
+                    {/* LEFT: fixed-width sidebar */}
+                    <Box
+                        sx={{
+                            flex: "0 0 250px",
+                            width: { xs: "100%", md: 320 },
+                            position: { md: "sticky" },
+                            top: { md: 88 },              // under top app bar
+                        }}
+                    >
+                        <FilterCard
+                            onUserInput={handleChange}
+                            titleFilter={nameFilter}
+                            genreFilter={genreFilter}
+                            sortOrder={sortOrder}
+                        />
+                    </Box>
 
-                {/* RIGHT: Movies grid */}
-                <Grid item xs={12} md={9} lg={10} sx={{ minWidth: 0, flexGrow: 1 }}>
-                    <MovieList action={action} movies={displayedMovies} />
-                </Grid>
+                    {/* RIGHT: fluid movie grid */}
+                    <Box
+                        sx={{
+                            flex: "1 1 100%",     // allow full remaining width
+                            minWidth: 0,
+                            pr: { xs: 0, md: 2 }, // small right padding
+                        }}
+                    >
+                        <MovieList action={action} movies={displayedMovies} />
+                    </Box>
+
+                </Box>
             </Grid>
-
         </Grid>
     );
 }

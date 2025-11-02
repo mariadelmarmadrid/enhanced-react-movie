@@ -1,89 +1,154 @@
+import React, { useContext } from "react";
+import { Link } from "react-router";
 import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import CardHeader from "@mui/material/CardHeader";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
-import StarRateIcon from "@mui/icons-material/StarRate";
-import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
-import img from '../../images/film-poster-placeholder.png'
-import { formatReleaseDate } from '../../util';
-import { Link } from "react-router";
-import Avatar from '@mui/material/Avatar';
-import React, { useContext } from "react";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import StarRateIcon from "@mui/icons-material/StarRate";
+import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
+
+import img from "../../images/film-poster-placeholder.png";
+import { formatReleaseDate } from "../../util";
 import { MoviesContext } from "../../contexts/moviesContextValue";
 
-
-
+// your existing card icons
+import AddToPlaylistIcon from "../cardIcons/addToPlaylist"; // watchlist
+// `action(movie)` will still render your AddToFavoritesIcon from the page
 
 export default function MovieCard({ movie, action }) {
   const { favorites, language } = useContext(MoviesContext);
+  const isFav = favorites.includes(movie.id);
 
-  if (favorites.find((id) => id === movie.id)) {
-    movie.favorite = true;
-  } else {
-    movie.favorite = false
-  }
+  const poster = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+    : img;
 
+  const rating =
+    typeof movie.vote_average === "number"
+      ? movie.vote_average.toFixed(1)
+      : "—";
 
+  const release = formatReleaseDate(movie.release_date, language) || "TBA";
 
   return (
-    <Card>
-      <CardHeader
-        avatar={
-          movie.favorite ? (
-            <Avatar sx={{ backgroundColor: 'red' }}>
-              <FavoriteIcon />
+    <Card
+      sx={{
+        width: "100%",     // fill the grid cell width (keeps all cards same width)
+        height: "100%",
+        borderRadius: 3,
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
+        transition: "transform .18s, box-shadow .18s",
+        "&:hover": { transform: "translateY(-4px)", boxShadow: "0 10px 22px rgba(0,0,0,0.24)" },
+      }}
+    >
+
+      {/* Whole card navigates to details */}
+      <CardActionArea component={Link} to={`/movies/${movie.id}`} sx={{ alignItems: "stretch" }}>
+        <Box sx={{ position: "relative" }}>
+          <CardMedia
+            component="img"
+            image={poster}
+            alt={movie.title}
+            sx={{ height: 420, objectFit: "cover", display: "block" }}
+          />
+
+          {/* Rating badge */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: 10,
+              left: 10,
+              bgcolor: "rgba(0,0,0,0.7)",
+              color: "white",
+              px: 1,
+              py: 0.25,
+              borderRadius: 1.5,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 0.5,
+              fontSize: 13,
+            }}
+          >
+            <StarRateIcon sx={{ fontSize: 16 }} />
+            {rating}
+          </Box>
+
+          {/* Favorite badge */}
+          {isFav && (
+            <Avatar
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                width: 28,
+                height: 28,
+                bgcolor: "error.main",
+              }}
+            >
+              <FavoriteIcon sx={{ fontSize: 18, color: "white" }} />
             </Avatar>
-          ) : null
-        }
-        title={
-          <Typography variant="h5" component="p">
-            {movie.title}{" "}
+          )}
+        </Box>
+
+        <CardContent sx={{ pb: 1 }}>
+          {/* Title: wrap to multiple lines, same visual height on all cards */}
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              lineHeight: 1.25,
+              display: "-webkit-box",      // enables line clamp
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,          // <= up to 2 lines
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
+              overflowWrap: "anywhere",
+              minHeight: "calc(1.25em * 2)", // reserve space so row heights align
+              mb: 0.5,
+            }}
+          >
+            {movie.title}
           </Typography>
-        }
-      />
 
-      <CardMedia
-        sx={{ height: 500 }}
-        image={
-          movie.poster_path
-            ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-            : img
-        }
-      />
-      <CardContent>
-        <Grid container>
-          <Grid size={{ xs: 6 }}>
-            <Typography variant="h6" component="p">
-              <CalendarIcon fontSize="small" />
-              {formatReleaseDate(movie.release_date, language) || 'TBA'}
-            </Typography>
+
+
+          {/* Meta */}
+          <Grid container spacing={1} sx={{ mt: 0.5 }}>
+            <Grid item xs={12}>
+              <Typography variant="body2" color="text.secondary">
+                <CalendarIcon sx={{ fontSize: 16, verticalAlign: "middle", mr: 0.5 }} />
+                {release}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 6 }}>
-            <Typography variant="h6" component="p">
-              <StarRateIcon fontSize="small" />
-              {"  "} {movie.vote_average}{" "}
-            </Typography>
-          </Grid>
-        </Grid>
-      </CardContent>
-      <CardActions disableSpacing>
+        </CardContent>
+      </CardActionArea>
 
-        {action(movie)}
-
-        <Link to={`/movies/${movie.id}`}>
-          <Button variant="outlined" size="medium" color="primary">
-            More Info ...
-          </Button>
-        </Link>
-
+      {/* Bottom actions: favorite (via action(movie)) + watchlist icon */}
+      <CardActions
+        sx={{
+          mt: "auto",
+          px: 1.5,
+          pb: 1.5,
+          pt: 0.5,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        {action(movie)}               {/* your existing Favorite icon button */}
+        <AddToPlaylistIcon movie={movie} />  {/* new Watchlist icon button */}
       </CardActions>
-
     </Card>
   );
 }
