@@ -15,7 +15,8 @@ import UpcomingMoviesPage from "./pages/upcomingMoviesPage";
 import TopRatedMoviesPage from "./pages/topRatedMoviesPage";
 import NowPlayingMoviesPage from "./pages/nowPlayingMoviesPage";
 import PopularMoviesPage from "./pages/popularMoviesPage";
-import PersonPage from './pages/personPage'
+import PersonPage from './pages/personPage';
+import CastAndCrewPage from './pages/castAndCrewPage';
 
 
 
@@ -50,6 +51,7 @@ const App = () => {
             <Route path="/movies/now-playing" element={<NowPlayingMoviesPage />} />
             <Route path="/movies/popular" element={<PopularMoviesPage />} />
             <Route path="/person/:id" element={<PersonPage />} />
+            <Route path="/movies/:id/cast" element={<CastAndCrewPage />} />
           </Routes>
         </MoviesContextProvider>
       </BrowserRouter>
